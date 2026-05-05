@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // PageView ইভেন্ট পাঠানোর জন্য স্ক্রিপ্ট
+      (function() {
+        const capi_url = "https://still-stream-48626-bb0ac4cda957.herokuapp.com/api/v1/events";
+        const api_key = "bbVXXOsm7_I-q0jRbWnISLAACP3TlUJHvUbQhvzVsBw";
+
+        fetch(capi_url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': api_key
+          },
+          body: JSON.stringify({
+            "data": [{
+              "event_name": "PageView",
+              "event_time": Math.floor(Date.now() / 1000),
+              "event_id": "pv_" + Date.now(), // Deduplication ID
+              "event_source_url": window.location.href,
+              "user_data": {
+                "client_ip_address": "8.8.8.8", // ইউজার আইপি
+                "client_user_agent": navigator.userAgent
+              }
+            }]
+          })
+        })
+        .then(response => response.json())
+        .then(data => console.log('CAPI Status:', data))
+        .catch(error => console.error('CAPI Error:', error));
+      })();
+    </script>
+  </body>
+</html>
+
